@@ -19,9 +19,9 @@ Then copy the binary to `./src/test/chromedriver`
   - run `docker-compose up --build`, it will start a postgresql container with a table *user* and a demo user. 
   - Verify that postgresql is running: `docker ps`
   - Verify that the environment variables in **Dockerfile** are the same in your **application.properties** file 
-      - spring.datasource.url= jdbc:postgresql://localhost:5432/reports
-      - spring.datasource.username=postgres
-      - spring.datasource.password=mysecretpassword
+      - spring.datasource.url= jdbc:postgresql://localhost:5432/barbershop
+      - spring.datasource.username=barbershop
+      - spring.datasource.password=12345
 
 - Build the project:
   - `mvn clean install`
@@ -31,6 +31,8 @@ Then copy the binary to `./src/test/chromedriver`
      `export JDBC_DATABASE_URL="jdbc:postgresql://host:5432/barbershop?user=barbershop&password=12345"`
      
     `java -jar -Dspring.profiles.active=prod target/*.jar`
+    
+The server can also be ran and debugged from IntelliJ     
     
 The app will run on port 8080, open your browser to open 
 
