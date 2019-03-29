@@ -1,8 +1,8 @@
 package es.leanmind.barbershop.infrastructure;
 
 import es.leanmind.barbershop.domain.AppointmentRepository;
+import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
@@ -21,10 +21,17 @@ public class PostgresAppointmentRepository implements AppointmentRepository {
     }
 
     @Override
-    public boolean haveAppointment(String user) throws SQLException {
-        //consulta bbdd
-        return false;
+    public boolean haveAppointment(String username) throws SQLException {
+        String query =  "SELECT COUNT(owner_id)" +
+                        " FROM appointments" +
+                        " WHERE owner_id =   (SELECT id" +
+                                            " FROM owners" +
+                                            " WHERE username = :username)";
+        Connection connection = sql2o.open();
+        Integer queryResult = connection.createQuery(query)
+            .addParameter("username", username)
+            .executeScalar(Integer.class);
+
+        return queryResult > 0;
     }
-
-
 }

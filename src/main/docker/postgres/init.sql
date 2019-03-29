@@ -39,6 +39,15 @@ CREATE TABLE establishments_owners
   OWNER INTEGER
 );
 
+DROP TABLE IF EXISTS appointments;
+CREATE TABLE appointments (
+  ID SERIAL NOT NULL PRIMARY KEY,
+  TIME INT NOT NULL,
+  OWNER_ID INT NOT NULL
+);
+
+
+
 INSERT INTO establishments(name)
 VALUES ('Baberia Paco'),
   ('Tim Barbers'),
