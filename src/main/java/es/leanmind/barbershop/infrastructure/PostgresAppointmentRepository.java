@@ -23,7 +23,7 @@ public class PostgresAppointmentRepository implements AppointmentRepository {
     @Override
     public boolean haveAppointment(String user) throws SQLException {
         //consulta bbdd
-        return true;
+        return false;
     }
 
 
