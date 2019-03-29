@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
@@ -60,11 +61,22 @@ public class AppointmentShould extends IntegrationTests {
     }
 
     @Test
-    public void be_made_by_the_owner() throws IOException, SQLException {
+    public void be_made_by_the_customer() throws IOException, SQLException {
         createEstablishment();
         doWebLogin(Configuration.ownername, Configuration.webPassword);
-        //make the appointment
-        //assert the appointment is made
+
+        boolean confirmated = createAppointment(new Date());
+
+        assertThat(confirmated).isTrue();
+
+        //seleccionar fecha y hora
+        //confirmar
+
+    }
+
+    private Boolean createAppointment(Date confirmated) {
+
+        return null;
     }
 
     private void doWebLogin(String username, String password) {
