@@ -13,7 +13,7 @@ public class Configuration {
     public static final String dbUser = "barbershop";
     public static final String dbPassword = "12345";
     public static final String connectionBaseUrl = "jdbc:postgresql://localhost:5432/";
-    public static final String testDb = "test";
+    public static final String testDb = "barbershop";
     public static final String connectionTestDatabase = connectionBaseUrl + testDb + "?user=" + dbUser + "&password=" + dbPassword;
     public static final String productionDb = "barbershop";
 }

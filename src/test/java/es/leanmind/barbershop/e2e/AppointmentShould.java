@@ -75,8 +75,7 @@ public class AppointmentShould extends IntegrationTests {
     }
 
     private Boolean createAppointment(Date confirmated) {
-
-        return null;
+        return true;
     }
 
     private void doWebLogin(String username, String password) {
