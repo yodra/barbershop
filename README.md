@@ -49,6 +49,10 @@ You should be able to login with "barbershop@leanmind.es" and password "12345" a
   
       `docker rm $(docker ps -a -q)`
       
+  - It's also possible that your docker is attached to a zombie volume. To delete them run:
+     
+       `docker volume prune`
+      
 ### Database ###
 Passwords are hashed with BCrypt. An online tool for this could be this one:      
       
