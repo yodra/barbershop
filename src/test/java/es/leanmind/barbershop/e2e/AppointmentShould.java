@@ -1,6 +1,7 @@
 package es.leanmind.barbershop.e2e;
 
 import es.leanmind.barbershop.Configuration;
+import es.leanmind.barbershop.domain.AppointmentService;
 import es.leanmind.barbershop.domain.Credentials;
 import es.leanmind.barbershop.domain.EstablishmentService;
 import es.leanmind.barbershop.helpers.IntegrationTests;
@@ -19,22 +20,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 
+import static es.leanmind.barbershop.Configuration.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         properties = {"" +
-                "spring.datasource.url=jdbc:postgresql://localhost:5432/" + Configuration.testDb + "?user=" + Configuration.dbUser + "&password=" + Configuration.dbPassword,
+                "spring.datasource.url=jdbc:postgresql://localhost:5432/" + testDb + "?user=" + dbUser + "&password=" + dbPassword,
                 "server.port=" + Properties.WEB_SERVER_PORT
         })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AppointmentShould extends IntegrationTests {
 
     private WebDriver driver;
-    private EstablishmentService establishmentService = TestFactory.establishmentService(Configuration.connectionTestDatabase);
+    private EstablishmentService establishmentService = TestFactory.establishmentService(connectionTestDatabase);
+    private AppointmentService appointmentService = TestFactory.appointmentService(connectionTestDatabase);
 
     private WebDriver browser() {
         if (driver == null) {
@@ -49,7 +53,7 @@ public class AppointmentShould extends IntegrationTests {
     }
 
     private void startChrome() {
-        System.setProperty("webdriver.chrome.driver", Configuration.chromeDriverPath);
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver = new ChromeDriver();
     }
 
@@ -63,32 +67,40 @@ public class AppointmentShould extends IntegrationTests {
     @Test
     public void be_made_by_the_customer() throws IOException, SQLException {
         createEstablishment();
-        doWebLogin(Configuration.ownername, Configuration.webPassword);
+        doWebLogin(ownername, webPassword);
+        doWebGiveAppointment("10/04/2019", "13:30");
 
-        boolean confirmated = createAppointment(new Date());
+        //createAppointment(ownername, new Date());
+        boolean haveAppointmentThisUser = haveAppointment(ownername);
 
-        assertThat(confirmated).isTrue();
-
-        //seleccionar fecha y hora
-        //confirmar
-
+        assertThat(haveAppointmentThisUser).isTrue();
     }
 
-    private Boolean createAppointment(Date confirmated) {
-        return true;
+    private void doWebGiveAppointment(String date, String time) {
+        browser().get(webUrl + appointmentsUrl);
+        browser().findElement(By.name("date")).sendKeys(date);
+        browser().findElement(By.name("time")).sendKeys(time);
+        browser().findElement(By.name("submitAppointment")).click();
+    }
+
+    private void createAppointment(String user, Date appointmentDate) throws SQLException {
+        appointmentService.create(user, appointmentDate);
+    }
+
+    private boolean haveAppointment(String user) throws SQLException {
+        return appointmentService.haveAppointment(user);
     }
 
     private void doWebLogin(String username, String password) {
-        browser().get(Configuration.webUrl + Configuration.loginUrl);
+        browser().get(webUrl + loginUrl);
         browser().findElement(By.name("username")).sendKeys(username);
         browser().findElement(By.name("password")).sendKeys(password);
         browser().findElement(By.name("submitLogin")).click();
         //TODO: assert that response status code is 200
     }
-
     private void createEstablishment() throws SQLException {
-        Credentials webCredentials = new Credentials(Configuration.ownername, Configuration.webPassword);
-        establishmentService.create(Configuration.establishmentName, webCredentials);
+        Credentials webCredentials = new Credentials(ownername, webPassword);
+        establishmentService.create(establishmentName, webCredentials);
     }
 
     private void waitForElementWithId(String className, WebDriver browser) {
