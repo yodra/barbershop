@@ -12,7 +12,6 @@ public class AppointmentRepositoryShould {
     private Sql2o sql2o;
 
 
-
     @Test
     public void not_exists_appointments_by_user() throws SQLException {
         String userName = "test";
@@ -20,4 +19,16 @@ public class AppointmentRepositoryShould {
         sql2o = new Sql2o(Configuration.connectionBaseUrl + Configuration.testDb, Configuration.dbUser, Configuration.dbPassword);
         assertThat(appointmentRepository.haveAppointment(userName)).isFalse();
     }
+
+
+    @Test
+    public void exists_appointments_by_user() throws SQLException {
+        String userName = "test1";
+        appointmentRepository = new PostgresAppointmentRepository(Configuration.connectionTestDatabase);
+        sql2o = new Sql2o(Configuration.connectionBaseUrl + Configuration.testDb, Configuration.dbUser, Configuration.dbPassword);
+        assertThat(appointmentRepository.haveAppointment(userName)).isFalse();
+    }
+
+
+
 }
