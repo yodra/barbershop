@@ -1,18 +1,3 @@
-DROP DATABASE barbershop;
-DROP USER IF EXISTS barbershop;
-
-CREATE USER barbershop
-WITH CREATEDB
-  LOGIN
-  PASSWORD '12345';
-
-CREATE DATABASE barbershop
-OWNER barbershop
-ENCODING 'utf-8';
-
--- Start from here if you use Docker or Heroku database
--- Heroku database uses another username and database name
-
 DROP TABLE IF EXISTS establishments;
 CREATE TABLE establishments
 (
