@@ -28,7 +28,7 @@ Then copy the binary to `./src/test/chromedriver`
   
 - Run the server:
 
-     `export JDBC_DATABASE_URL="jdbc:postgresql://host:5432/barbershop?user=barbershop&password=12345"`
+     `export JDBC_DATABASE_URL="jdbc:postgresql://127.0.0.1:5432/barbershop?user=barbershop&password=12345"`
      
     `java -jar -Dspring.profiles.active=prod target/*.jar`
     
@@ -48,6 +48,10 @@ You should be able to login with "barbershop@leanmind.es" and password "12345" a
   - Sometimes, there are zombie containers, run to remove them:
   
       `docker rm $(docker ps -a -q)`
+      
+  - It's also possible that your docker is attached to a zombie volume. To delete them run:
+     
+       `docker volume prune`
       
 ### Database ###
 Passwords are hashed with BCrypt. An online tool for this could be this one:      
